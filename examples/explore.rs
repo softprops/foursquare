@@ -20,7 +20,7 @@ fn run() -> Result<()> {
         Some((id, sec)) => {
             let mut core = Core::new()?;
             let foursq = Client::new("20170801", Some(Credentials::new(id, sec)), &core.handle());
-            match core.run(foursq.venues().get("5783fac6cd10361b6f2ca3fc")) {
+            match core.run(foursq.venues().explore()) {
                 Ok(res) => println!("{:#?}", res),
                 Err(err) => println!("err {}", err),
             }
