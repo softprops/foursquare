@@ -30,10 +30,10 @@ pub use errors::{Error, ErrorKind, Result};
 
 const DEFAULT_HOST: &str = "https://api.foursquare.com";
 
-/// A type alias for `Futures` that may return `github::Errors`
+/// A type alias for `Futures` that may return `foursquare::Errors`
 pub type Future<T> = Box<StdFuture<Item = T, Error = Error>>;
 
-/// A type alias for `Streams` that may result in `github::Errors`
+/// A type alias for `Streams` that may result in `foursquare::Errors`
 pub type Stream<T> = Box<StdStream<Item = T, Error = Error>>;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -188,7 +188,7 @@ impl Credentials {
     }
 }
 
-/// Entry point interface for interacting with Github API
+/// Entry point interface for interacting with Foursquare API
 #[derive(Clone, Debug)]
 pub struct Client<C>
 where
@@ -250,6 +250,7 @@ where
         }
     }
 
+    /// https://developer.foursquare.com/docs/api/venues/details
     pub fn venue<I>(&self, id: I) -> Future<Response<VenueWrapper>>
     where
         I: Into<String>,
@@ -267,6 +268,21 @@ where
             Method::Get,
             format!(
                 "{host}/v2/venues/search?{query}",
+                host = self.host,
+                query = form_urlencoded::Serializer::new(String::new())
+                    .extend_pairs(vec![("ll", "40.7243,-74.0018"), ("query", "coffee")])
+                    .finish()
+            ),
+            None,
+        )
+    }
+
+    /// https://developer.foursquare.com/docs/api/venues/explore
+    pub fn search(&self) -> Future<Response<Venues>> {
+        self.request(
+            Method::Get,
+            format!(
+                "{host}/v2/venues/explore?{query}",
                 host = self.host,
                 query = form_urlencoded::Serializer::new(String::new())
                     .extend_pairs(vec![("ll", "40.7243,-74.0018"), ("query", "coffee")])
