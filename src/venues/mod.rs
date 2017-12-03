@@ -1,5 +1,6 @@
-use hyper::client::Connect;
+
 use hyper::Method;
+use hyper::client::Connect;
 use url::form_urlencoded;
 
 use {Client, Future};
@@ -39,7 +40,9 @@ impl<C: Connect + Clone> Venues<C> {
                 "{host}/v2/venues/search?{query}",
                 host = self.client.host,
                 query = form_urlencoded::Serializer::new(String::new())
-                    .extend_pairs(vec![("ll", "37.5665,126.9780"), ("query", "coffee")])
+                    .extend_pairs(
+                        vec![("ll", "37.5665,126.9780"), ("query", "coffee")],
+                    )
                     .finish()
             ),
             None,
@@ -54,7 +57,9 @@ impl<C: Connect + Clone> Venues<C> {
                 "{host}/v2/venues/explore?{query}",
                 host = self.client.host,
                 query = form_urlencoded::Serializer::new(String::new())
-                    .extend_pairs(vec![("ll", "37.5665,126.9780"), ("query", "coffee")])
+                    .extend_pairs(
+                        vec![("ll", "37.5665,126.9780"), ("query", "coffee")],
+                    )
                     .finish()
             ),
             None,

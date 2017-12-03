@@ -15,11 +15,11 @@ extern crate tokio_core;
 #[cfg(feature = "tls")]
 extern crate hyper_tls;
 
-use futures::{Stream as StdStream, Future as StdFuture, IntoFuture};
-#[cfg(feature = "tls")]
-use hyper_tls::HttpsConnector;
+use futures::{Future as StdFuture, IntoFuture, Stream as StdStream};
 use hyper::{Client as HyperClient, Method};
 use hyper::client::{Connect, HttpConnector, Request};
+#[cfg(feature = "tls")]
+use hyper_tls::HttpsConnector;
 use serde::de::DeserializeOwned;
 use tokio_core::reactor::Handle;
 use url::Url;
@@ -71,7 +71,11 @@ where
 
 #[cfg(feature = "tls")]
 impl Client<HttpsConnector<HttpConnector>> {
-    pub fn new<A>(version: A, credentials: Option<Credentials>, handle: &Handle) -> Self
+    pub fn new<A>(
+        version: A,
+        credentials: Option<Credentials>,
+        handle: &Handle,
+    ) -> Self
     where
         A: Into<String>,
     {
@@ -123,7 +127,12 @@ where
         Venues::new(self.clone())
     }
 
-    fn request<Out>(&self, method: Method, uri: String, body: Option<Vec<u8>>) -> Future<Out>
+    fn request<Out>(
+        &self,
+        method: Method,
+        uri: String,
+        body: Option<Vec<u8>>,
+    ) -> Future<Out>
     where
         Out: DeserializeOwned + 'static,
     {
