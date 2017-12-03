@@ -64,13 +64,20 @@ pub struct Contact {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Price {
+    pub tier: u16,
+    pub message: String,
+    pub currency: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Location {
     pub address: String,
     #[serde(rename = "crossStreet")]
     pub cross_street: Option<String>,
     pub lat: f64,
     pub lng: f64,
-    pub distance: u32,
+    pub distance: Option<u32>,
     #[serde(rename = "postalCode")]
     pub postal_code: Option<String>,
     pub cc: String,
@@ -96,7 +103,7 @@ pub struct Category {
     #[serde(rename = "shortName")]
     pub short_name: String,
     pub icon: Icon,
-    pub primary: bool,
+    pub primary: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -123,6 +130,7 @@ pub struct Venue {
     // pub stats: Stats
     /// URL of the venue’s website, typically provided by the venue manager.
     pub url: Option<String>,
+
     // Contains the hours during the week that the venue is open along with any named hours segments in a human-readable format. For machine readable hours see venues/hours
     // pub hours: Option<Hours>,
     // Contains the hours during the week when people usually go to the venue. For machine readable hours see venues/hours.
@@ -131,8 +139,8 @@ pub struct Venue {
     pub has_menu: Option<bool>,
     /// An object containing url and mobileUrl that display the menu information for this venue.
     pub menu: Option<Menu>,
-    // An object containing the price tier from 1 (least pricey) - 4 (most pricey) and a message describing the price tier.
-    // pub price: ??,
+    /// An object containing the price tier from 1 (least pricey) - 4 (most pricey) and a message describing the price tier.
+    pub price: Option<Price>,
     // Numerical rating of the venue (0 through 10). Not all venues will have a rating.
     // pub rating: ???,
     // Information about who is here now. If present, there is always a count, the number of people here. If viewing details and there is a logged-in user, there is also a groups field with friends and others as types.
@@ -145,15 +153,21 @@ pub struct Venue {
     // pub tips: ??,
     // ??
     #[serde(rename = "referralId")]
-    pub referral_id: String,
+    pub referral_id: Option<String>,
     #[serde(rename = "hasPerk")]
-    pub has_perk: bool,
+    pub has_perk: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Venues {
     pub venues: Vec<Venue>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VenueWrapper {
+    pub venue: Venue,
+}
+
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Credentials {
@@ -234,6 +248,17 @@ where
             http: http,
             credentials: credentials,
         }
+    }
+
+    pub fn venue<I>(&self, id: I) -> Future<Response<VenueWrapper>>
+    where
+        I: Into<String>,
+    {
+        self.request(
+            Method::Get,
+            format!("{host}/v2/venues/{id}", host = self.host, id = id.into()),
+            None,
+        )
     }
 
     /// https://developer.foursquare.com/docs/api/venues/search
