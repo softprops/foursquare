@@ -9,6 +9,7 @@ use std::env;
 use tokio_core::reactor::Core;
 
 use foursquare::{Client, Credentials, Result};
+use foursquare::venue::ExploreOptions;
 
 quick_main!(run);
 
@@ -24,7 +25,12 @@ fn run() -> Result<()> {
                 Some(Credentials::client(id, sec)),
                 &core.handle(),
             );
-            match core.run(foursq.venues().explore()) {
+            match core.run(
+                foursq.venues().explore(&ExploreOptions::builder()
+                    .ll("37.5665,126.9780")
+                    .query("coffee".to_string())
+                    .build()?),
+            ) {
                 Ok(res) => println!("{:#?}", res),
                 Err(err) => println!("err {}", err),
             }

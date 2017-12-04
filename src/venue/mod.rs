@@ -2,6 +2,7 @@
 
 use hyper::Method;
 use hyper::client::Connect;
+use serde_urlencoded;
 use url::form_urlencoded;
 
 use {Client, Future, Response};
@@ -43,17 +44,21 @@ impl<C: Connect + Clone> Venues<C> {
     /// See the official
     /// [api docs](https://developer.foursquare.com/docs/api/venues/search)
     /// for more information
-    pub fn search(&self) -> Future<Response<SearchResponse>> {
+    pub fn search(
+        &self,
+        options: &SearchOptions,
+    ) -> Future<Response<SearchResponse>> {
         self.client.request(
             Method::Get,
             format!(
                 "{host}/v2/venues/search?{query}",
                 host = self.client.host,
-                query = form_urlencoded::Serializer::new(String::new())
+                query = serde_urlencoded::to_string(options).unwrap()
+                /*query = form_urlencoded::Serializer::new(String::new())
                     .extend_pairs(
                         vec![("ll", "37.5665,126.9780"), ("query", "coffee")],
                     )
-                    .finish()
+                    .finish()*/
             ),
             None,
         )
@@ -64,7 +69,10 @@ impl<C: Connect + Clone> Venues<C> {
     /// See the official
     /// [api docs](https://developer.foursquare.com/docs/api/venues/explore)
     /// for more information
-    pub fn explore(&self) -> Future<Response<ExploreResponse>> {
+    pub fn explore(
+        &self,
+        options: &ExploreOptions,
+    ) -> Future<Response<ExploreResponse>> {
         self.client.request(
             Method::Get,
             format!(
@@ -82,6 +90,81 @@ impl<C: Connect + Clone> Venues<C> {
 }
 
 // representations
+
+/// Search api options.
+///
+/// Use SearchOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct SearchOptions {
+    #[serde(skip_serializing_if = "String::is_empty")]
+    ll: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    near: String,
+    intent: Option<String>,
+    radius: Option<u32>,
+    sw: Option<String>,
+    ne: Option<String>,
+    query: Option<String>,
+    /// Number of results to return, up to 50.
+    limit: Option<u32>,
+    #[serde(rename = "categoryId")]
+    category_id: Option<String>,
+    llAcc: Option<f64>,
+    alt: Option<u32>,
+    altAcc: Option<f64>,
+    url: Option<String>,
+    #[serde(rename = "providerId")]
+    provider_id: Option<String>,
+    #[serde(rename = "linkedId")]
+    linked_id: Option<String>,
+}
+
+impl SearchOptions {
+    pub fn builder() -> SearchOptionsBuilder {
+        SearchOptionsBuilder::default()
+    }
+}
+
+/// Explore api options.
+///
+/// Use ExploreOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct ExploreOptions {
+    #[serde(skip_serializing_if = "String::is_empty")]
+    ll: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    near: String,
+    intent: Option<String>,
+    radius: Option<u32>,
+    section: Option<String>,
+    query: Option<String>,
+    limit: Option<u32>,
+    offset: Option<u32>,
+    novelty: Option<String>,
+    #[serde(rename = "friendVisits")]
+    friend_visits: Option<String>,
+    time: Option<String>,
+    day: Option<String>,
+    #[serde(rename = "venuePhotos")]
+    venue_photos: Option<u16>, // 1 or 0
+    #[serde(rename = "lastVenue")]
+    last_venue: Option<String>,
+    #[serde(rename = "openNow")]
+    open_now: Option<u16>, // 1 or 0
+    #[serde(rename = "sortByDistance")]
+    sort_by_distance: Option<u16>, // 1 or 0,
+    price: Option<String>,
+    saved: Option<u16>, // 1 or 0
+}
+
+impl ExploreOptions {
+    pub fn builder() -> ExploreOptionsBuilder {
+        ExploreOptionsBuilder::default()
+    }
+}
+
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Coords {
@@ -209,6 +292,7 @@ pub struct Group {
     pub name: String,
     pub items: Vec<Item>,
 }
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ExploreResponse {
     /// If no radius was specified in the request, presents the radius that was used for the query (based upon the density of venues in the query area).
@@ -232,4 +316,18 @@ pub struct ExploreResponse {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VenueResponse {
     pub venue: Venue,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn search_options_serialize() {
+        assert_eq!(
+            serde_urlencoded::to_string(
+                &SearchOptions::builder().near("foo bar").build().unwrap(),
+            ).unwrap(),
+            "near=foo+bar"
+        )
+    }
 }

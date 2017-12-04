@@ -38,10 +38,12 @@
 //!
 //! Operations typically result in a `foursquare::Result` Type which is an alias for Rust's
 //! built-in Result with the Err Type fixed to the
-//! [foursquare::Error](errors/struct.Error.html) type.
+//! [foursquare::Error](error/struct.Error.html) type.
 //!
 #![allow(missing_docs)] // todo: make this a deny eventually
 
+#[macro_use]
+extern crate derive_builder;
 extern crate futures;
 #[macro_use]
 extern crate error_chain;
@@ -52,10 +54,15 @@ extern crate hyper;
 extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
+extern crate serde_urlencoded;
 extern crate url;
 extern crate tokio_core;
 #[cfg(feature = "tls")]
 extern crate hyper_tls;
+
+#[cfg(test)]
+#[macro_use]
+extern crate pretty_assertions;
 
 use futures::{Future as StdFuture, IntoFuture, Stream as StdStream};
 use hyper::{Client as HyperClient, Method};
@@ -63,13 +70,14 @@ use hyper::client::{Connect, HttpConnector, Request};
 #[cfg(feature = "tls")]
 use hyper_tls::HttpsConnector;
 use serde::de::DeserializeOwned;
+
 use tokio_core::reactor::Handle;
 use url::Url;
 
-pub mod venues;
-pub use venues::Venues;
-pub mod errors;
-pub use errors::{Error, ErrorKind, Result};
+pub mod venue;
+pub use venue::Venues;
+pub mod error;
+pub use error::{Error, ErrorKind, Result};
 
 const DEFAULT_HOST: &str = "https://api.foursquare.com";
 
