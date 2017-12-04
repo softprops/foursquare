@@ -13,7 +13,8 @@ where
 }
 
 impl<C: Connect + Clone> Venues<C> {
-    pub fn new(client: Client<C>) -> Self {
+    #[doc(hidden)]
+    pub(crate) fn new(client: Client<C>) -> Self {
         Self { client }
     }
 
