@@ -21,7 +21,7 @@ fn run() -> Result<()> {
             let mut core = Core::new()?;
             let foursq = Client::new(
                 "20170801",
-                Some(Credentials::new(id, sec)),
+                Some(Credentials::client(id, sec)),
                 &core.handle(),
             );
             match core.run(foursq.venues().search()) {

@@ -1,3 +1,45 @@
+//! Foursquare provides a api bindings to the
+//! [foursquare.com API](https://developer.foursquare.com/)
+//!
+//! # Examples
+//!
+//! Typical use will require instantiation of a `foursquare::Client`.
+//! Which requires a version string, set of `foursquare::Credentials`
+//! and a tokio_core `Handle`.
+//!
+//! ```no_run
+//! extern crate foursquare;
+//! extern crate hyper;
+//! extern crate tokio_core;
+//!
+//! use tokio_core::reactor::Core;
+//! use foursquare::{Credentials, Client};
+//!
+//! fn main() {
+//!   let mut core = Core::new().expect("reactor fail");
+//!   let fs = Client::new(
+//!     "YYYYMMDD",
+//!     Some(Credentials::client(
+//!       "client_id", "client_secret"
+//!     )),
+//!     &core.handle()
+//!   );
+//! }
+//! ```
+//!
+//! Access to various services are provided via methods on instances of
+//! the `Client` type.
+//!
+//! The convention for executing operations typically looks like
+//! `client.venues().operation(OperationOptions)` where operation is the name
+//! of the operation to perform
+//!
+//! # Errors
+//!
+//! Operations typically result in a `foursquare::Result` Type which is an alias for Rust's
+//! built-in Result with the Err Type fixed to the
+//! [foursquare::Error](errors/struct.Error.html) type.
+//!
 #![allow(missing_docs)] // todo: make this a deny eventually
 
 extern crate futures;
@@ -38,22 +80,36 @@ pub type Future<T> = Box<StdFuture<Item = T, Error = Error>>;
 pub type Stream<T> = Box<StdStream<Item = T, Error = Error>>;
 
 
+/// types of credentials used to authenticate requests
+///
+/// see [this doc](https://developer.foursquare.com/docs/api/configuration/authentication)
+/// for more information
 #[derive(Debug, PartialEq, Clone)]
-pub struct Credentials {
-    client_id: String,
-    client_secret: String,
+pub enum Credentials {
+    Client {
+        client_id: String,
+        client_secret: String,
+    },
+    User { oauth_token: String },
 }
 
 impl Credentials {
-    pub fn new<I, S>(id: I, secret: S) -> Self
+    pub fn client<I, S>(id: I, secret: S) -> Self
     where
         I: Into<String>,
         S: Into<String>,
     {
-        Credentials {
+        Credentials::Client {
             client_id: id.into(),
             client_secret: secret.into(),
         }
+    }
+
+    pub fn user<T>(token: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Credentials::User { oauth_token: token.into() }
     }
 }
 
@@ -71,6 +127,9 @@ where
 
 #[cfg(feature = "tls")]
 impl Client<HttpsConnector<HttpConnector>> {
+    /// returns a new client
+    ///
+    /// version should be in `YYYYMMDD` format
     pub fn new<A>(
         version: A,
         credentials: Option<Credentials>,
@@ -123,6 +182,7 @@ where
         }
     }
 
+    /// Return an interface to venue operations
     pub fn venues(&self) -> Venues<C> {
         Venues::new(self.clone())
     }
@@ -142,7 +202,15 @@ where
                 "v",
                 self.version.as_ref(),
             );
-            if let Some(Credentials {
+            if let Some(Credentials::User { ref oauth_token }) =
+                self.credentials
+            {
+                parsed.query_pairs_mut().append_pair(
+                    "oauth_token",
+                    oauth_token.as_str(),
+                );
+            }
+            if let Some(Credentials::Client {
                             ref client_id,
                             ref client_secret,
                         }) = self.credentials
