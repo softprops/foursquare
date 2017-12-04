@@ -221,7 +221,7 @@ pub struct Price {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Location {
-    pub address: String,
+    pub address: Option<String>,
     #[serde(rename = "crossStreet")]
     pub cross_street: Option<String>,
     pub lat: f64,
