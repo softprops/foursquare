@@ -71,7 +71,6 @@ use hyper::client::{Connect, HttpConnector, Request};
 #[cfg(feature = "tls")]
 use hyper_tls::HttpsConnector;
 use serde::de::DeserializeOwned;
-
 use tokio_core::reactor::Handle;
 use url::Url;
 
@@ -84,7 +83,6 @@ const DEFAULT_HOST: &str = "https://api.foursquare.com";
 
 /// A type alias for `Futures` that may return `foursquare::Errors`
 pub type Future<T> = Box<StdFuture<Item = T, Error = Error>>;
-
 
 /// types of credentials used to authenticate requests
 ///

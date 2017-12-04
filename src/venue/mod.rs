@@ -152,7 +152,6 @@ pub struct ExploreOptions {
     /// Altitude of the user’s location, in meters.
     alt: Option<u32>,
     /// Accuracy of the user’s altitude, in meters.
-    altAcc: Option<f64>,
     #[serde(rename = "altAcc")]
     alt_acc: Option<f64>,
     /// Radius to search within, in meters. If radius is not specified, a suggested radius will be used based on the density of venues in the area. The maximum supported radius is currently 100,000 meters.
