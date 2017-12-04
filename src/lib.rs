@@ -86,10 +86,12 @@ pub type Stream<T> = Box<StdStream<Item = T, Error = Error>>;
 /// for more information
 #[derive(Debug, PartialEq, Clone)]
 pub enum Credentials {
+    /// Userless authentication
     Client {
         client_id: String,
         client_secret: String,
     },
+    /// User authentication, specific to a foursquare member
     User { oauth_token: String },
 }
 
