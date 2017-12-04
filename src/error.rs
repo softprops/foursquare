@@ -6,14 +6,17 @@ use hyper::error::UriError;
 use serde_json::error::Error as SerdeError;
 use std::io::Error as IoError;
 
+use Response;
+use std::collections::HashMap;
+
 error_chain! {
     errors {
         Fault {
             code: StatusCode,
-            error: ClientError,
+            error: Response<HashMap<String, String>>,
         } {
-            display("{}: '{}'", code, error.message)
-            description(error.message.as_str())
+            display("{}: '{}'", code, error.clone().meta.error_detail.unwrap())
+            description("unknown error")
           }
     }
     foreign_links {
@@ -22,21 +25,4 @@ error_chain! {
         IO(IoError);
         URI(UriError);
     }
-}
-
-// representations
-
-#[derive(Debug, Deserialize, PartialEq)]
-pub struct FieldErr {
-    pub resource: String,
-    pub field: Option<String>,
-    pub code: String,
-    pub message: Option<String>,
-    pub documentation_url: Option<String>,
-}
-
-#[derive(Debug, Deserialize, PartialEq)]
-pub struct ClientError {
-    pub message: String,
-    pub errors: Option<Vec<FieldErr>>,
 }

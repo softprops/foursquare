@@ -1,9 +1,7 @@
 //! Venue interfaces
 
-use hyper::Method;
 use hyper::client::Connect;
 use serde_urlencoded;
-use url::form_urlencoded;
 
 use {Client, Future, Response};
 
@@ -28,15 +26,11 @@ impl<C: Connect + Clone> Venues<C> {
     where
         I: Into<String>,
     {
-        self.client.request(
-            Method::Get,
-            format!(
-                "{host}/v2/venues/{id}",
-                host = self.client.host,
-                id = id.into()
-            ),
-            None,
-        )
+        self.client.get(format!(
+            "{host}/v2/venues/{id}",
+            host = self.client.host,
+            id = id.into()
+        ))
     }
 
     /// Search for venues
@@ -48,20 +42,11 @@ impl<C: Connect + Clone> Venues<C> {
         &self,
         options: &SearchOptions,
     ) -> Future<Response<SearchResponse>> {
-        self.client.request(
-            Method::Get,
-            format!(
-                "{host}/v2/venues/search?{query}",
-                host = self.client.host,
-                query = serde_urlencoded::to_string(options).unwrap()
-                /*query = form_urlencoded::Serializer::new(String::new())
-                    .extend_pairs(
-                        vec![("ll", "37.5665,126.9780"), ("query", "coffee")],
-                    )
-                    .finish()*/
-            ),
-            None,
-        )
+        self.client.get(format!(
+            "{host}/v2/venues/search?{query}",
+            host = self.client.host,
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
     }
 
     /// Get recommendations on venues
@@ -73,23 +58,30 @@ impl<C: Connect + Clone> Venues<C> {
         &self,
         options: &ExploreOptions,
     ) -> Future<Response<ExploreResponse>> {
-        self.client.request(
-            Method::Get,
-            format!(
-                "{host}/v2/venues/explore?{query}",
-                host = self.client.host,
-                query = form_urlencoded::Serializer::new(String::new())
-                    .extend_pairs(
-                        vec![("ll", "37.5665,126.9780"), ("query", "coffee")],
-                    )
-                    .finish()
-            ),
-            None,
-        )
+        self.client.get(format!(
+            "{host}/v2/venues/explore?{query}",
+            host = self.client.host,
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
     }
 }
 
 // representations
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum Intent {
+    Checkin,
+    Global,
+    Browse,
+    Match,
+}
+
+impl Default for Intent {
+    fn default() -> Self {
+        Intent::Checkin
+    }
+}
 
 /// Search api options.
 ///
@@ -104,7 +96,7 @@ pub struct SearchOptions {
     #[serde(skip_serializing_if = "String::is_empty")]
     near: String,
     /// One of the values below, indicating your intent in performing the search. If no value is specified, defaults to checkin.
-    intent: Option<String>,
+    intent: Option<Intent>,
     /// Limit results to venues within this many meters of the specified location. Defaults to a city-wide area. Only valid for requests with intent=browse, or requests with intent=checkin and categoryId or query. Does not apply to intent=match requests. The maximum supported radius is currently 100,000 meters.
     radius: Option<u32>,
     /// With ne, limits results to the bounding box defined by the latitude and longitude given by sw as its south-west corner, and ne as its north-east corner. The bounding box is only supported for intent=browse searches. Not valid with ll or radius. Bounding boxes with an area up to approximately 10,000 square kilometers are supported.
@@ -119,11 +111,13 @@ pub struct SearchOptions {
     #[serde(rename = "categoryId")]
     category_id: Option<String>,
     /// Accuracy of latitude and longitude, in meters.
-    llAcc: Option<f64>,
+    #[serde(rename = "llAcc")]
+    ll_acc: Option<f64>,
     /// Altitude of the user’s location, in meters.
     alt: Option<u32>,
     /// Accuracy of the user’s altitude, in meters.
-    altAcc: Option<f64>,
+    #[serde(rename = "altAcc")]
+    alt_acc: Option<f64>,
     /// A third-party URL which we will attempt to match against our map of venues to URLs.
     url: Option<String>,
     /// Identifier for a known third party that is part of our map of venues to URLs, used in conjunction with linkedId.
@@ -153,11 +147,14 @@ pub struct ExploreOptions {
     #[serde(skip_serializing_if = "String::is_empty")]
     near: String,
     /// Accuracy of latitude and longitude, in meters.
-    llAcc: Option<f64>,
+    #[serde(rename = "llAcc")]
+    ll_acc: Option<f64>,
     /// Altitude of the user’s location, in meters.
     alt: Option<u32>,
     /// Accuracy of the user’s altitude, in meters.
     altAcc: Option<f64>,
+    #[serde(rename = "altAcc")]
+    alt_acc: Option<f64>,
     /// Radius to search within, in meters. If radius is not specified, a suggested radius will be used based on the density of venues in the area. The maximum supported radius is currently 100,000 meters.
     radius: Option<u32>,
     /// One of food, drinks, coffee, shops, arts, outdoors, sights, trending, nextVenues (venues frequently visited after a given venue), or topPicks (a mix of recommendations generated without a query from the user). Choosing one of these limits results to venues with the specified category or property.
@@ -200,7 +197,6 @@ impl ExploreOptions {
         ExploreOptionsBuilder::default()
     }
 }
-
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Coords {
@@ -365,5 +361,11 @@ mod tests {
             ).unwrap(),
             "near=foo+bar"
         )
+    }
+
+    #[test]
+    fn default_intent() {
+        let default: Intent = Default::default();
+        assert_eq!(default, Intent::Checkin)
     }
 }

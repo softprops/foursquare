@@ -142,33 +142,20 @@ impl Client<HttpsConnector<HttpConnector>> {
     /// returns a new client
     ///
     /// version should be in `YYYYMMDD` format
-    pub fn new<A>(
-        version: A,
+    pub fn new<V>(
+        version: V,
         credentials: Option<Credentials>,
         handle: &Handle,
     ) -> Self
     where
-        A: Into<String>,
-    {
-        Self::host(DEFAULT_HOST, version, credentials, handle)
-    }
-
-    pub fn host<H, A>(
-        host: H,
-        version: A,
-        credentials: Option<Credentials>,
-        handle: &Handle,
-    ) -> Self
-    where
-        H: Into<String>,
-        A: Into<String>,
+        V: Into<String>,
     {
         let connector = HttpsConnector::new(4, handle).unwrap();
         let http = HyperClient::configure()
             .connector(connector)
             .keep_alive(true)
             .build(handle);
-        Self::custom(host, version, credentials, http)
+        Self::custom(version, credentials, http)
     }
 }
 
@@ -177,18 +164,16 @@ where
     C: Clone + Connect,
 {
     /// Return a new Client with a custom `hyper::Client`
-    pub fn custom<H, A>(
-        host: H,
-        version: A,
+    pub fn custom<V>(
+        version: V,
         credentials: Option<Credentials>,
         http: HyperClient<C>,
     ) -> Self
     where
-        H: Into<String>,
-        A: Into<String>,
+        V: Into<String>,
     {
         Self {
-            host: host.into(),
+            host: DEFAULT_HOST.to_owned(),
             version: version.into(),
             http: http,
             credentials: credentials,
@@ -198,6 +183,13 @@ where
     /// Return an interface to venue operations
     pub fn venues(&self) -> Venues<C> {
         Venues::new(self.clone())
+    }
+
+    fn get<Out>(&self, uri: String) -> Future<Out>
+    where
+        Out: DeserializeOwned + 'static,
+    {
+        self.request(Method::Get, uri, None)
     }
 
     fn request<Out>(
@@ -261,6 +253,10 @@ where
                         },
                     )
                 } else {
+                    debug!(
+                        "response error {}",
+                        String::from_utf8_lossy(&response_body)
+                    );
                     Err(
                         ErrorKind::Fault {
                             code: status,
@@ -275,14 +271,18 @@ where
 
 // representations
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Meta {
     pub code: u16,
     #[serde(rename = "requestId")]
     pub request_id: String,
+    #[serde(rename = "errorType")]
+    pub error_type: Option<String>,
+    #[serde(rename = "errorDetail")]
+    pub error_detail: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Response<T> {
     pub meta: Meta,
     pub response: T,
