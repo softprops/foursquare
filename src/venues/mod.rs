@@ -19,7 +19,10 @@ impl<C: Connect + Clone> Venues<C> {
     }
 
     /// Get the defaults for single venue
-    /// https://developer.foursquare.com/docs/api/venues/details
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/details)
+    /// for more information
     pub fn get<I>(&self, id: I) -> Future<Response<VenueResponse>>
     where
         I: Into<String>,
@@ -36,7 +39,10 @@ impl<C: Connect + Clone> Venues<C> {
     }
 
     /// Search for venues
-    /// https://developer.foursquare.com/docs/api/venues/search
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/search)
+    /// for more information
     pub fn search(&self) -> Future<Response<SearchResponse>> {
         self.client.request(
             Method::Get,
@@ -54,7 +60,10 @@ impl<C: Connect + Clone> Venues<C> {
     }
 
     /// Get recommendations on venues
-    /// https://developer.foursquare.com/docs/api/venues/explore
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/explore)
+    /// for more information
     pub fn explore(&self) -> Future<Response<ExploreResponse>> {
         self.client.request(
             Method::Get,

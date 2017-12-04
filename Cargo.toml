@@ -13,7 +13,6 @@ readme = "README.md"
 
 [badges]
 travis-ci = { repository = "softprops/foursquare" }
-coveralls = { repository = "softprops/foursquare" }
 
 [dev-dependencies]
 env_logger = "0.3"
