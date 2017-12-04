@@ -97,25 +97,39 @@ impl<C: Connect + Clone> Venues<C> {
 #[derive(Default, Debug, Deserialize, Serialize, Builder)]
 #[builder(setter(into), default)]
 pub struct SearchOptions {
+    /// required unless near is provided. Latitude and longitude of the user’s location. Optional if using intent=global
     #[serde(skip_serializing_if = "String::is_empty")]
     ll: String,
+    /// required unless ll is provided. A string naming a place in the world. If the near string is not geocodable, returns a failed_geocode error. Otherwise, searches within the bounds of the geocode and adds a geocode object to the response.
     #[serde(skip_serializing_if = "String::is_empty")]
     near: String,
+    /// One of the values below, indicating your intent in performing the search. If no value is specified, defaults to checkin.
     intent: Option<String>,
+    /// Limit results to venues within this many meters of the specified location. Defaults to a city-wide area. Only valid for requests with intent=browse, or requests with intent=checkin and categoryId or query. Does not apply to intent=match requests. The maximum supported radius is currently 100,000 meters.
     radius: Option<u32>,
+    /// With ne, limits results to the bounding box defined by the latitude and longitude given by sw as its south-west corner, and ne as its north-east corner. The bounding box is only supported for intent=browse searches. Not valid with ll or radius. Bounding boxes with an area up to approximately 10,000 square kilometers are supported.
     sw: Option<String>,
+    /// See sw.
     ne: Option<String>,
+    /// A search term to be applied against venue names.
     query: Option<String>,
     /// Number of results to return, up to 50.
     limit: Option<u32>,
+    /// A comma separated list of categories to limit results to. If you specify categoryId. specifying a radius may improve results. If specifying a top-level category, all sub-categories will also match the query. Does not apply to intent=match requests.
     #[serde(rename = "categoryId")]
     category_id: Option<String>,
+    /// Accuracy of latitude and longitude, in meters.
     llAcc: Option<f64>,
+    /// Altitude of the user’s location, in meters.
     alt: Option<u32>,
+    /// Accuracy of the user’s altitude, in meters.
     altAcc: Option<f64>,
+    /// A third-party URL which we will attempt to match against our map of venues to URLs.
     url: Option<String>,
+    /// Identifier for a known third party that is part of our map of venues to URLs, used in conjunction with linkedId.
     #[serde(rename = "providerId")]
     provider_id: Option<String>,
+    /// Identifier used by third party specified in providerId, which we will attempt to match against our map of venues to URLs.
     #[serde(rename = "linkedId")]
     linked_id: Option<String>,
 }
@@ -132,30 +146,52 @@ impl SearchOptions {
 #[derive(Default, Debug, Deserialize, Serialize, Builder)]
 #[builder(setter(into), default)]
 pub struct ExploreOptions {
+    /// required unless near is provided. Latitude and longitude of the user’s location.
     #[serde(skip_serializing_if = "String::is_empty")]
     ll: String,
+    /// required unless ll is provided. A string naming a place in the world. If the near string is not geocodable, returns a failed_geocode error. Otherwise, searches within the bounds of the geocode and adds a geocode object to the response.
     #[serde(skip_serializing_if = "String::is_empty")]
     near: String,
-    intent: Option<String>,
+    /// Accuracy of latitude and longitude, in meters.
+    llAcc: Option<f64>,
+    /// Altitude of the user’s location, in meters.
+    alt: Option<u32>,
+    /// Accuracy of the user’s altitude, in meters.
+    altAcc: Option<f64>,
+    /// Radius to search within, in meters. If radius is not specified, a suggested radius will be used based on the density of venues in the area. The maximum supported radius is currently 100,000 meters.
     radius: Option<u32>,
+    /// One of food, drinks, coffee, shops, arts, outdoors, sights, trending, nextVenues (venues frequently visited after a given venue), or topPicks (a mix of recommendations generated without a query from the user). Choosing one of these limits results to venues with the specified category or property.
     section: Option<String>,
+    /// A term to be searched against a venue’s tips, category, etc. The query parameter has no effect when a section is specified.
     query: Option<String>,
+    /// Number of results to return, up to 50.
     limit: Option<u32>,
+    /// Used to page through results, up to 50.
     offset: Option<u32>,
+    /// Pass new or old to limit results to places the acting user hasn’t been or has been, respectively. Omitting this parameter returns a mixture of old and new venues.
     novelty: Option<String>,
+    /// Pass visited or notvisited to limit results to places the acting user’s friends have or haven’t been, respectively. Omitting this parameter returns a mixture of venues to which the user’s friends have or haven’t been.
     #[serde(rename = "friendVisits")]
     friend_visits: Option<String>,
+    /// Pass any to retrieve results for any time of day. Omitting this parameter returns results targeted to the current time of day.
     time: Option<String>,
+    /// Pass any to retrieve results for any day of the week. Omitting this parameter returns results targeted to the current day of the week.
     day: Option<String>,
+    /// Boolean flag to include a photo in the response for each venue, if one is available. Default is 0 (no photos). Photos are returned as part of the venue JSON object.
     #[serde(rename = "venuePhotos")]
     venue_photos: Option<u16>, // 1 or 0
+    /// A venue ID to use in combination with the intent=nextVenues parameter, which returns venues users often visit after a given venue. If intent=nextVenues is specified but lastVenue is not, the user’s last check-in will be used if it is within 2 hours. If the user has not checked in within the last 2 hours, no results will be returned.
     #[serde(rename = "lastVenue")]
     last_venue: Option<String>,
+    /// Boolean flag to only include venues that are open now. This prefers official provider hours but falls back to popular check-in hours.
     #[serde(rename = "openNow")]
     open_now: Option<u16>, // 1 or 0
+    /// Boolean flag to sort the results by distance instead of relevance.
     #[serde(rename = "sortByDistance")]
     sort_by_distance: Option<u16>, // 1 or 0,
+    /// Comma separated list of price points. Currently the valid range of price points are [1,2,3,4], 1 being the least expensive, 4 being the most expensive. For food venues, in the United States, 1 is < $10 an entree, 2 is $10-$20 an entree, 3 is $20-$30 an entree, 4 is > $30 an entree.
     price: Option<String>,
+    /// Boolean flag to only include venues that the user has saved on their To-Do list or to another list.
     saved: Option<u16>, // 1 or 0
 }
 
