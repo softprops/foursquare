@@ -4,8 +4,8 @@
 //! # Examples
 //!
 //! Typical use will require instantiation of a `foursquare::Client`.
-//! Which requires a version string, set of `foursquare::Credentials`
-//! and a tokio_core `Handle`.
+//! This requires a version string, set of `foursquare::Credentials`
+//! and a tokio_core `Handle` reference.
 //!
 //! ```no_run
 //! extern crate foursquare;
@@ -31,13 +31,14 @@
 //! the `Client` type.
 //!
 //! The convention for executing operations typically looks like
-//! `client.venues().operation(OperationOptions)` where operation is the name
+//! `client.venues().operation(&OperationOptions)` where operation is the name
 //! of the operation to perform
 //!
 //! # Errors
 //!
-//! Operations typically result in a `foursquare::Result` Type which is an alias for Rust's
-//! built-in Result with the Err Type fixed to the
+//! Operations typically result in a `foursquare::Future` Type which is an alias
+//! for the the [futures](https://docs.rs/futures/futures) crates Future trait
+//! with the Error type fixed to the
 //! [foursquare::Error](error/struct.Error.html) type.
 //!
 #![allow(missing_docs)] // todo: make this a deny eventually
@@ -83,9 +84,6 @@ const DEFAULT_HOST: &str = "https://api.foursquare.com";
 
 /// A type alias for `Futures` that may return `foursquare::Errors`
 pub type Future<T> = Box<StdFuture<Item = T, Error = Error>>;
-
-/// A type alias for `Streams` that may result in `foursquare::Errors`
-pub type Stream<T> = Box<StdStream<Item = T, Error = Error>>;
 
 
 /// types of credentials used to authenticate requests
