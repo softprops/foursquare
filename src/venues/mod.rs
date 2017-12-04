@@ -1,9 +1,10 @@
+//! Venue interfaces
 
 use hyper::Method;
 use hyper::client::Connect;
 use url::form_urlencoded;
 
-use {Client, Future};
+use {Client, Future, Response};
 
 pub struct Venues<C>
 where
@@ -16,6 +17,8 @@ impl<C: Connect + Clone> Venues<C> {
     pub fn new(client: Client<C>) -> Self {
         Self { client }
     }
+
+    /// Get the defaults for single venue
     /// https://developer.foursquare.com/docs/api/venues/details
     pub fn get<I>(&self, id: I) -> Future<Response<VenueResponse>>
     where
@@ -32,6 +35,7 @@ impl<C: Connect + Clone> Venues<C> {
         )
     }
 
+    /// Search for venues
     /// https://developer.foursquare.com/docs/api/venues/search
     pub fn search(&self) -> Future<Response<SearchResponse>> {
         self.client.request(
@@ -49,6 +53,7 @@ impl<C: Connect + Clone> Venues<C> {
         )
     }
 
+    /// Get recommendations on venues
     /// https://developer.foursquare.com/docs/api/venues/explore
     pub fn explore(&self) -> Future<Response<ExploreResponse>> {
         self.client.request(
@@ -68,19 +73,6 @@ impl<C: Connect + Clone> Venues<C> {
 }
 
 // representations
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Meta {
-    pub code: u16,
-    #[serde(rename = "requestId")]
-    pub request_id: String,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Response<T> {
-    pub meta: Meta,
-    pub response: T,
-}
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Coords {
@@ -164,10 +156,10 @@ pub struct Venue {
     /// URL of the venue’s website, typically provided by the venue manager.
     pub url: Option<String>,
 
-    // Contains the hours during the week that the venue is open along with any named hours segments in a human-readable format. For machine readable hours see venues/hours
-    // pub hours: Option<Hours>,
-    // Contains the hours during the week when people usually go to the venue. For machine readable hours see venues/hours.
-    // pub popular: Hours
+    /// Contains the hours during the week that the venue is open along with any named hours segments in a human-readable format. For machine readable hours see venues/hours
+    /// pub hours: Option<Hours>,
+    /// Contains the hours during the week when people usually go to the venue. For machine readable hours see venues/hours.
+    /// pub popular: Hours
     #[serde(rename = "hasMenu")]
     pub has_menu: Option<bool>,
     /// An object containing url and mobileUrl that display the menu information for this venue.

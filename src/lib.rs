@@ -94,6 +94,7 @@ pub enum Credentials {
 }
 
 impl Credentials {
+    /// Return a new set of Client credentials
     pub fn client<I, S>(id: I, secret: S) -> Self
     where
         I: Into<String>,
@@ -105,6 +106,7 @@ impl Credentials {
         }
     }
 
+    /// Return a new User credential
     pub fn user<T>(token: T) -> Self
     where
         T: Into<String>,
@@ -164,6 +166,7 @@ impl<C> Client<C>
 where
     C: Clone + Connect,
 {
+    /// Return a new Client with a custom `hyper::Client`
     pub fn custom<H, A>(
         host: H,
         version: A,
@@ -258,4 +261,19 @@ where
             ))
         }))
     }
+}
+
+// representations
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Meta {
+    pub code: u16,
+    #[serde(rename = "requestId")]
+    pub request_id: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Response<T> {
+    pub meta: Meta,
+    pub response: T,
 }
