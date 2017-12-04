@@ -19,9 +19,9 @@
 //!   let mut core = Core::new().expect("reactor fail");
 //!   let fs = Client::new(
 //!     "YYYYMMDD",
-//!     Some(Credentials::client(
+//!     Credentials::client(
 //!       "client_id", "client_secret"
-//!     )),
+//!     ),
 //!     &core.handle()
 //!   );
 //! }
@@ -134,7 +134,7 @@ where
     host: String,
     version: String,
     http: HyperClient<C>,
-    credentials: Option<Credentials>,
+    credentials: Credentials,
 }
 
 #[cfg(feature = "tls")]
@@ -142,11 +142,7 @@ impl Client<HttpsConnector<HttpConnector>> {
     /// returns a new client
     ///
     /// version should be in `YYYYMMDD` format
-    pub fn new<V>(
-        version: V,
-        credentials: Option<Credentials>,
-        handle: &Handle,
-    ) -> Self
+    pub fn new<V>(version: V, credentials: Credentials, handle: &Handle) -> Self
     where
         V: Into<String>,
     {
@@ -166,7 +162,7 @@ where
     /// Return a new Client with a custom `hyper::Client`
     pub fn custom<V>(
         version: V,
-        credentials: Option<Credentials>,
+        credentials: Credentials,
         http: HyperClient<C>,
     ) -> Self
     where
@@ -207,18 +203,16 @@ where
                 "v",
                 self.version.as_ref(),
             );
-            if let Some(Credentials::User { ref oauth_token }) =
-                self.credentials
-            {
+            if let Credentials::User { ref oauth_token } = self.credentials {
                 parsed.query_pairs_mut().append_pair(
                     "oauth_token",
                     oauth_token.as_str(),
                 );
             }
-            if let Some(Credentials::Client {
-                            ref client_id,
-                            ref client_secret,
-                        }) = self.credentials
+            if let Credentials::Client {
+                ref client_id,
+                ref client_secret,
+            } = self.credentials
             {
                 parsed
                     .query_pairs_mut()
