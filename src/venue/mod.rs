@@ -262,6 +262,47 @@ pub struct Menu {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Photos {
+    pub count: u64,
+    pub groups: Vec<Group<PhotoItem>>,
+}
+
+/// venue photo
+///
+/// see [this doc](https://developer.foursquare.com/docs/api/photos/details)
+/// for photo url construction
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PhotoItem {
+    pub id: String,
+    pub prefix: String,
+    pub suffix: String,
+    pub width: u16,
+    pub height: u16,
+    pub user: User,
+    pub visibility: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct User {
+    pub id: String,
+    #[serde(rename = "firstName")]
+    pub first_name: String,
+    #[serde(rename = "lastName")]
+    pub last_name: String,
+    pub photo: UserPhoto,
+}
+
+/// user photo
+///
+/// see [this doc](https://developer.foursquare.com/docs/api/photos/details)
+/// for photo url construction
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UserPhoto {
+    pub prefix: String,
+    pub suffix: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Venue {
     /// A unique string identifier for this venue.
     pub id: String,
@@ -290,14 +331,13 @@ pub struct Venue {
     pub menu: Option<Menu>,
     /// An object containing the price tier from 1 (least pricey) - 4 (most pricey) and a message describing the price tier.
     pub price: Option<Price>,
-    // Numerical rating of the venue (0 through 10). Not all venues will have a rating.
-    // pub rating: ???,
     // Information about who is here now. If present, there is always a count, the number of people here. If viewing details and there is a logged-in user, there is also a groups field with friends and others as types.
     // pub hereNow: ???
     // Seconds since epoch when the venue was created.
     // pub createdAt: ???
-    // A count and groups of photos for this venue. Group types are checkin and venue. Not all items will be present.
-    // pub photos: ???,
+    /// A count and groups of photos for this venue. Group types are checkin and venue. Not all items will be present.
+    /// Will typically not be present for search requests
+    pub photos: Option<Photos>,
     // Contains the total count of tips and groups with friends and others as groupTypes. Groups may change over time.
     // pub tips: ??,
     // ??
@@ -305,6 +345,10 @@ pub struct Venue {
     pub referral_id: Option<String>,
     #[serde(rename = "hasPerk")]
     pub has_perk: Option<bool>,
+    /// Numerical rating of the venue (0 through 10). Not all venues will have a rating.
+    pub rating: Option<f32>,
+    #[serde(rename = "ratingSignals")]
+    pub rating_signals: Option<u64>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -313,16 +357,19 @@ pub struct SearchResponse {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Item {
+pub struct VenueItem {
     pub venue: Venue,
     #[serde(rename = "referralId")]
     pub referral_id: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Group {
+pub struct Group<I> {
     pub name: String,
-    pub items: Vec<Item>,
+    #[serde(rename = "type")]
+    pub group_type: String,
+    pub count: Option<u64>,
+    pub items: Vec<I>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -342,7 +389,7 @@ pub struct ExploreResponse {
     #[serde(rename = "totalResults")]
     pub total_results: u64,
     /// An array of objects representing groups of recommendations. Each group contains a type such as “recommended” a human-readable (eventually localized) name such as “Recommended Places,” and an array items of recommendation objects, which have an ordered list of objects which contain reasons and venue. The reasons are count and items, where each item has a type such as “social” and a message about why this place may be of interest to the acting user. The venues are compact venues that include stats and hereNow data. We encourage clients to be robust against the introduction or removal of group types by treating the groups as opaque objects to be displayed or by placing unfamiliar groups in a catchall group.
-    pub groups: Vec<Group>,
+    pub groups: Vec<Group<VenueItem>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
