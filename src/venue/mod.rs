@@ -392,7 +392,7 @@ pub struct ExploreResponse {
     pub header_full_location: String,
     #[serde(rename = "headerLocationGranularity")]
     pub header_location_granularity: String,
-    pub query: String,
+    pub query: Option<String>,
     #[serde(rename = "totalResults")]
     pub total_results: u64,
     /// An array of objects representing groups of recommendations. Each group contains a type such as “recommended” a human-readable (eventually localized) name such as “Recommended Places,” and an array items of recommendation objects, which have an ordered list of objects which contain reasons and venue. The reasons are count and items, where each item has a type such as “social” and a message about why this place may be of interest to the acting user. The venues are compact venues that include stats and hereNow data. We encourage clients to be robust against the introduction or removal of group types by treating the groups as opaque objects to be displayed or by placing unfamiliar groups in a catchall group.

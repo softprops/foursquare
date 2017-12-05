@@ -1,3 +1,7 @@
+# 0.1.4
+
+* explore Response.query is now an Option type, None in cases where you are exploring without a query
+
 # 0.1.3
 
 * deserialize hours
