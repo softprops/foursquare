@@ -50,6 +50,22 @@ impl<C: Connect + Clone> Venues<C> {
         ))
     }
 
+    /// Type ahead suggestions
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/suggestcompletion)
+    /// for more information
+    pub fn suggest(
+        &self,
+        options: &SearchOptions,
+    ) -> Future<Response<SearchResponse>> {
+        self.client.get(format!(
+            "{host}/v2/venues/suggestcompletion?{query}",
+            host = self.client.host,
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
+    }
+
     /// Get recommendations on venues
     ///
     /// See the official
@@ -132,6 +148,41 @@ pub struct SearchOptions {
 impl SearchOptions {
     pub fn builder() -> SearchOptionsBuilder {
         SearchOptionsBuilder::default()
+    }
+}
+
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct SuggestOptions {
+    /// required Latitude and longitude of the user’s location. (Required for query searches)
+    #[serde(skip_serializing_if = "String::is_empty")]
+    ll: String,
+    /// required unless ll is provided. A string naming a place in the world. If the near string is not geocodable, returns a failed_geocode error. Otherwise, searches within the bounds of the geocode. Adds a geocode object to the response. (Required for query searches)
+    #[serde(skip_serializing_if = "String::is_empty")]
+    near: String,
+    /// Limit results to venues within this many meters of the specified location. Defaults to a city-wide area. Only valid for requests with intent=browse, or requests with intent=checkin and categoryId or query. Does not apply to intent=match requests. The maximum supported radius is currently 100,000 meters.
+    radius: Option<u32>,
+    /// With ne, limits results to the bounding box defined by the latitude and longitude given by sw as its south-west corner, and ne as its north-east corner. The bounding box is only supported for intent=browse searches. Not valid with ll or radius. Bounding boxes with an area up to approximately 10,000 square kilometers are supported.
+    sw: Option<String>,
+    /// See sw.
+    ne: Option<String>,
+    /// A search term to be applied against venue names.
+    query: Option<String>,
+    /// Number of results to return, up to 50.
+    limit: Option<u32>,
+    /// Accuracy of latitude and longitude, in meters.
+    #[serde(rename = "llAcc")]
+    ll_acc: Option<f64>,
+    /// Altitude of the user’s location, in meters.
+    alt: Option<u32>,
+    /// Accuracy of the user’s altitude, in meters.
+    #[serde(rename = "altAcc")]
+    alt_acc: Option<f64>,
+}
+
+impl SuggestOptions {
+    pub fn builder() -> SuggestOptionsBuilder {
+        SuggestOptionsBuilder::default()
     }
 }
 
@@ -237,6 +288,9 @@ pub struct Location {
     pub formatted_address: Vec<String>,
 }
 
+/// Icon photo
+///
+/// Pieces needed to construct category icons at various sizes. Combine prefix with a size (32, 44, 64, and 88 are available) and suffix, e.g. https://foursquare.com/img/categories/food/default_64.png. To get an image with a gray background, use bg_ before the size, e.g. https://foursquare.com/img/categories_v2/food/icecream_bg_32.png.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Icon {
     pub prefix: String,
