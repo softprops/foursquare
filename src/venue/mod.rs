@@ -303,6 +303,15 @@ pub struct UserPhoto {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Hours {
+    pub status: Option<String>,
+    #[serde(rename = "isOpen")]
+    pub is_open: bool,
+    #[serde(rename = "isLocalHoliday")]
+    pub is_local_holiday: bool,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Venue {
     /// A unique string identifier for this venue.
     pub id: String,
@@ -320,11 +329,9 @@ pub struct Venue {
     // pub stats: Stats
     /// URL of the venue’s website, typically provided by the venue manager.
     pub url: Option<String>,
-
     /// Contains the hours during the week that the venue is open along with any named hours segments in a human-readable format. For machine readable hours see venues/hours
-    /// pub hours: Option<Hours>,
+    pub hours: Option<Hours>,
     /// Contains the hours during the week when people usually go to the venue. For machine readable hours see venues/hours.
-    /// pub popular: Hours
     #[serde(rename = "hasMenu")]
     pub has_menu: Option<bool>,
     /// An object containing url and mobileUrl that display the menu information for this venue.

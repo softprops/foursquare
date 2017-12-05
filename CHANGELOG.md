@@ -1,3 +1,6 @@
+# 0.1.3
+
+* deserialize hours
 # 0.1.2
 
 * deserialize photos and ratings
