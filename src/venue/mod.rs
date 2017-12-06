@@ -57,8 +57,8 @@ impl<C: Connect + Clone> Venues<C> {
     /// for more information
     pub fn suggest(
         &self,
-        options: &SearchOptions,
-    ) -> Future<Response<SearchResponse>> {
+        options: &SuggestOptions,
+    ) -> Future<Response<SuggestResponse>> {
         self.client.get(format!(
             "{host}/v2/venues/suggestcompletion?{query}",
             host = self.client.host,
@@ -280,12 +280,14 @@ pub struct Location {
     pub distance: Option<u32>,
     #[serde(rename = "postalCode")]
     pub postal_code: Option<String>,
-    pub cc: String,
+    /// Returns  None for suggest requests
+    pub cc: Option<String>,
     pub city: Option<String>,
     pub state: Option<String>,
     pub country: String,
+    /// Returns None for suggest requests
     #[serde(rename = "formattedAddress")]
-    pub formatted_address: Vec<String>,
+    pub formatted_address: Option<Vec<String>>,
 }
 
 /// Icon photo
@@ -372,13 +374,15 @@ pub struct Venue {
     /// The best known name for this venue.
     pub name: String,
     /// An object containing none, some, or all of twitter, phone, and formattedPhone. All are strings.
-    pub contact: Contact,
+    /// Will be None for suggest requests
+    pub contact: Option<Contact>,
     /// An object containing none, some, or all of address (street address), crossStreet, city, state, postalCode, country, lat, lng, and distance. All fields are strings, except for lat, lng, and distance. Distance is measured in meters. Some venues have their locations intentionally hidden for privacy reasons (such as private residences). If this is the case, the parameter isFuzzed will be set to true, and the lat/lng parameters will have reduced precision.
     pub location: Location,
     /// An array, possibly empty, of categories that have been applied to this venue. One of the categories will have a primary field indicating that it is the primary category for the venue. For the complete category tree, see categories.
     pub categories: Vec<Category>,
     /// Boolean indicating whether the owner of this business has claimed it and verified the information.
-    pub verified: bool,
+    /// Will be be None for suggest requests
+    pub verified: Option<bool>,
     // Contains checkinsCount (total checkins ever here), usersCount (total users who have ever checked in here), and tipCount (number of tips here).
     // pub stats: Stats
     /// URL of the venue’s website, typically provided by the venue manager.
@@ -412,6 +416,10 @@ pub struct Venue {
     pub rating_signals: Option<u64>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SuggestResponse {
+    pub minivenues: Vec<Venue>,
+}
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SearchResponse {
     pub venues: Vec<Venue>,
