@@ -1,3 +1,6 @@
+# 0.1.5
+
+* implement suggest completion interface
 # 0.1.4
 
 * explore Response.query is now an Option type, None in cases where you are exploring without a query
