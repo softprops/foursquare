@@ -23,14 +23,19 @@ impl<C: Connect + Clone> Venues<C> {
     /// See the official
     /// [api docs](https://developer.foursquare.com/docs/api/venues/details)
     /// for more information
-    pub fn get<I>(&self, id: I) -> Future<Response<VenueResponse>>
+    pub fn get<I>(
+        &self,
+        id: I,
+        options: &VenueDetailsOptions,
+    ) -> Future<Response<VenueResponse>>
     where
         I: Into<String>,
     {
         self.client.get(format!(
-            "{host}/v2/venues/{id}",
+            "{host}/v2/venues/{id}?={query}",
             host = self.client.host,
-            id = id.into()
+            id = id.into(),
+            query = serde_urlencoded::to_string(options).unwrap()
         ))
     }
 
@@ -144,7 +149,7 @@ pub struct SearchOptions {
     #[serde(rename = "linkedId")]
     linked_id: Option<String>,
     /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
-    pub locale: String,
+    pub locale: Option<String>,
 }
 
 impl SearchOptions {
@@ -181,12 +186,28 @@ pub struct SuggestOptions {
     #[serde(rename = "altAcc")]
     alt_acc: Option<f64>,
     /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
-    pub locale: String,
+    pub locale: Option<String>,
 }
 
 impl SuggestOptions {
     pub fn builder() -> SuggestOptionsBuilder {
         SuggestOptionsBuilder::default()
+    }
+}
+
+/// Venue details api options.
+///
+/// Use VenueDetailsOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct VenueDetailsOptions {
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    locale: Option<String>,
+}
+
+impl VenueDetailsOptions {
+    pub fn builder() -> VenueDetailsOptionsBuilder {
+        VenueDetailsOptionsBuilder::default()
     }
 }
 
@@ -246,7 +267,7 @@ pub struct ExploreOptions {
     /// Boolean flag to only include venues that the user has saved on their To-Do list or to another list.
     saved: Option<u16>, // 1 or 0
     /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
-    pub locale: String,
+    locale: Option<String>,
 }
 
 impl ExploreOptions {

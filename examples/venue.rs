@@ -9,6 +9,7 @@ use std::env;
 use tokio_core::reactor::Core;
 
 use foursquare::{Client, Credentials, Result};
+use foursquare::venue::VenueDetailsOptions;
 
 quick_main!(run);
 
@@ -24,7 +25,14 @@ fn run() -> Result<()> {
                 Credentials::client(id, sec),
                 &core.handle(),
             );
-            match core.run(foursq.venues().get("5783fac6cd10361b6f2ca3fc")) {
+            match core.run(
+                foursq.venues().get(
+                    "5783fac6cd10361b6f2ca3fc",
+                    &VenueDetailsOptions::builder()
+                        .locale("fr".to_string())
+                        .build()?,
+                ),
+            ) {
                 Ok(res) => println!("{:#?}", res),
                 Err(err) => println!("err {}", err),
             }
