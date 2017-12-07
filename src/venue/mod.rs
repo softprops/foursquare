@@ -598,10 +598,16 @@ pub struct Group<I> {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Warning {
+    pub text: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ExploreResponse {
+    pub warning: Option<Warning>,
     /// If no radius was specified in the request, presents the radius that was used for the query (based upon the density of venues in the query area).
     #[serde(rename = "suggestedRadius")]
-    pub suggested_radius: u32,
+    pub suggested_radius: Option<u32>,
     /// A text name for the location the user searched, e.g. “SoHo”.
     #[serde(rename = "headerLocation")]
     pub header_location: String,
