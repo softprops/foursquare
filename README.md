@@ -4,7 +4,7 @@
 
 ## [Documentation](https://softprops.github.io/foursquare)
 
-See the [examples][examples] directory for some inspiration
+See the [examples](examples) directory for some inspiration
 
 ## Install
 
