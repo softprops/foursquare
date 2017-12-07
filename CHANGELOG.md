@@ -1,3 +1,7 @@
+# 0.1.9
+
+* user last_name is now an Option type
+
 # 0.1.8
 
 * add interfaces for venue hours and tips

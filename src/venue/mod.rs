@@ -453,7 +453,7 @@ pub struct User {
     #[serde(rename = "firstName")]
     pub first_name: String,
     #[serde(rename = "lastName")]
-    pub last_name: String,
+    pub last_name: Option<String>,
     pub photo: UserPhoto,
 }
 
