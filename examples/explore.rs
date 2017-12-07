@@ -29,7 +29,7 @@ fn run() -> Result<()> {
                 foursq.venues().explore(&ExploreOptions::builder()
                     .ll("37.5665,126.9780")
                     .query("coffee".to_string())
-                    .locale("fr")
+                    .locale("fr".to_string())
                     .build()?),
             ) {
                 Ok(res) => println!("{:#?}", res),

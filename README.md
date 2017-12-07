@@ -4,6 +4,8 @@
 
 ## [Documentation](https://softprops.github.io/foursquare)
 
+See the [examples][examples] directory for some inspiration
+
 ## Install
 
 Add the following to your Cargo.toml file
