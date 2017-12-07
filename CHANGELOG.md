@@ -1,3 +1,7 @@
+# 0.1.8
+
+* add interfaces for venue hours and tips
+
 # 0.1.7
 
 * expand locale support to venue details method

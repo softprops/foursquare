@@ -18,7 +18,49 @@ impl<C: Connect + Clone> Venues<C> {
         Self { client }
     }
 
-    /// Get the defaults for single venue
+    /// Get the tips for a single venue
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/hours)
+    /// for more information
+    pub fn tips<I>(
+        &self,
+        id: I,
+        options: &TipsOptions,
+    ) -> Future<Response<TipsResponse>>
+    where
+        I: Into<String>,
+    {
+        self.client.get(format!(
+            "{host}/v2/venues/{id}/tips?={query}",
+            host = self.client.host,
+            id = id.into(),
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
+    }
+
+    /// Get the hours for a single venue
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/hours)
+    /// for more information
+    pub fn hours<I>(
+        &self,
+        id: I,
+        options: &HoursOptions,
+    ) -> Future<Response<VenueHoursResponse>>
+    where
+        I: Into<String>,
+    {
+        self.client.get(format!(
+            "{host}/v2/venues/{id}/hours?={query}",
+            host = self.client.host,
+            id = id.into(),
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
+    }
+
+    /// Get the details for single venue
     ///
     /// See the official
     /// [api docs](https://developer.foursquare.com/docs/api/venues/details)
@@ -195,6 +237,46 @@ impl SuggestOptions {
     }
 }
 
+
+/// Venue tips api options.
+///
+/// Use TipsOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct TipsOptions {
+    /// One of friends, recent, or popular.
+    sort: Option<String>,
+    /// Number of results to return, up to 500.
+    limit: Option<u32>,
+    /// Used to page through results.
+    offset: Option<u32>,
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    locale: Option<String>,
+}
+
+impl TipsOptions {
+    pub fn builder() -> TipsOptionsBuilder {
+        TipsOptionsBuilder::default()
+    }
+}
+
+
+/// Venue hours api options.
+///
+/// Use VenueDetailsOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct HoursOptions {
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    locale: Option<String>,
+}
+
+impl HoursOptions {
+    pub fn builder() -> HoursOptionsBuilder {
+        HoursOptionsBuilder::default()
+    }
+}
+
 /// Venue details api options.
 ///
 /// Use VenueDetailsOptions::builder() interface to construct these
@@ -361,7 +443,7 @@ pub struct PhotoItem {
     pub suffix: String,
     pub width: u16,
     pub height: u16,
-    pub user: User,
+    pub user: Option<User>,
     pub visibility: String,
 }
 
@@ -386,12 +468,59 @@ pub struct UserPhoto {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct TimeWindow {
+    pub start: String,
+    pub end: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Timeframe {
+    pub days: Vec<u16>,
+    #[serde(rename = "includesToday")]
+    pub includes_today: Option<bool>,
+    pub open: Vec<TimeWindow>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VenueHours {
+    pub timeframes: Vec<Timeframe>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VenueHoursResponse {
+    /// An array of timeframes of open hours.
+    pub hours: VenueHours,
+    /// An array of timeframes of popular hours.
+    pub popular: VenueHours,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Hours {
     pub status: Option<String>,
     #[serde(rename = "isOpen")]
     pub is_open: bool,
     #[serde(rename = "isLocalHoliday")]
     pub is_local_holiday: bool,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Tip {
+    pub id: String,
+    pub text: String,
+    #[serde(rename = "canonicalUrl")]
+    pub canonical_url: String,
+    pub photo: Option<PhotoItem>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Tips {
+    pub count: u32,
+    pub items: Vec<Tip>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct TipsResponse {
+    pub tips: Tips,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
