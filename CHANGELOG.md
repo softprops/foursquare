@@ -1,3 +1,7 @@
+# 0.1.6
+
+* support [i18n](https://developer.foursquare.com/docs/api/configuration/internationalization) by adding locale to venue request options
+
 # 0.1.5
 
 * implement suggest completion interface

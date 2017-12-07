@@ -143,6 +143,8 @@ pub struct SearchOptions {
     /// Identifier used by third party specified in providerId, which we will attempt to match against our map of venues to URLs.
     #[serde(rename = "linkedId")]
     linked_id: Option<String>,
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    pub locale: String,
 }
 
 impl SearchOptions {
@@ -178,6 +180,8 @@ pub struct SuggestOptions {
     /// Accuracy of the user’s altitude, in meters.
     #[serde(rename = "altAcc")]
     alt_acc: Option<f64>,
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    pub locale: String,
 }
 
 impl SuggestOptions {
@@ -241,6 +245,8 @@ pub struct ExploreOptions {
     price: Option<String>,
     /// Boolean flag to only include venues that the user has saved on their To-Do list or to another list.
     saved: Option<u16>, // 1 or 0
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    pub locale: String,
 }
 
 impl ExploreOptions {
