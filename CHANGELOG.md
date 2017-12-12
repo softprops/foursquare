@@ -1,3 +1,7 @@
+# 0.1.11
+
+* add venues recommendations interfaces
+* deserialize venue time zone and attributes, present only for details requests
 # 0.1.10
 
 * deserialize explore response warning, the suggested radius is now an Option type

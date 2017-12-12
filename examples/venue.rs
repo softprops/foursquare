@@ -25,14 +25,10 @@ fn run() -> Result<()> {
                 Credentials::client(id, sec),
                 &core.handle(),
             );
-            match core.run(
-                foursq.venues().get(
-                    "5783fac6cd10361b6f2ca3fc",
-                    &VenueDetailsOptions::builder()
-                        .locale("fr".to_string())
-                        .build()?,
-                ),
-            ) {
+            match core.run(foursq.venues().get(
+                "4b63f4c0f964a5209b982ae3",
+                &VenueDetailsOptions::builder().build()?,
+            )) {
                 Ok(res) => println!("{:#?}", res),
                 Err(err) => println!("err {}", err),
             }

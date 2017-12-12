@@ -544,6 +544,11 @@ pub struct Contact {
     #[serde(rename = "formattedPhone")]
     pub formatted_phone: Option<String>,
     pub twitter: Option<String>,
+    pub facebook: Option<String>,
+    #[serde(rename = "facebookUsername")]
+    pub facebook_username: Option<String>,
+    #[serde(rename = "facebookName")]
+    pub facebook_name: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -744,6 +749,12 @@ pub struct Venue {
     pub rating: Option<f32>,
     #[serde(rename = "ratingSignals")]
     pub rating_signals: Option<u64>,
+    /// time zone, only present in details requests
+    #[serde(rename = "timeZone")]
+    pub time_zone: Option<String>,
+    /// Attributes associated with the venue, such as price tier, whether the venue takes reservations, and parking availability.
+    /// only present in details requests
+    pub attributes: Option<AttributeGroups>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -769,6 +780,18 @@ pub struct Group<I> {
     pub group_type: String,
     pub count: Option<u64>,
     pub items: Vec<I>,
+}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AttributeGroups {
+    pub groups: Vec<Group<AttributeItem>>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AttributeItem {
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    #[serde(rename = "displayValue")]
+    pub display_value: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
