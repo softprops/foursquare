@@ -1,5 +1,7 @@
 //! Venue interfaces
 
+use std::fmt;
+
 use hyper::client::Connect;
 use serde_urlencoded;
 
@@ -113,7 +115,23 @@ impl<C: Connect + Clone> Venues<C> {
         ))
     }
 
-    /// Get recommendations on venues
+    /// Get venue recommendations in a target geography
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/recommendations)
+    /// for more information
+    pub fn recommendations(
+        &self,
+        options: &RecommendationsOptions,
+    ) -> Future<Response<RecommendationsResponse>> {
+        self.client.get(format!(
+            "{host}/v2/search/recommendations/?{query}",
+            host = self.client.host,
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
+    }
+
+    /// Explore venues in a target geography
     ///
     /// See the official
     /// [api docs](https://developer.foursquare.com/docs/api/venues/explore)
@@ -237,7 +255,6 @@ impl SuggestOptions {
     }
 }
 
-
 /// Venue tips api options.
 ///
 /// Use TipsOptions::builder() interface to construct these
@@ -259,7 +276,6 @@ impl TipsOptions {
         TipsOptionsBuilder::default()
     }
 }
-
 
 /// Venue hours api options.
 ///
@@ -290,6 +306,164 @@ pub struct VenueDetailsOptions {
 impl VenueDetailsOptions {
     pub fn builder() -> VenueDetailsOptionsBuilder {
         VenueDetailsOptionsBuilder::default()
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub enum Feature {
+    #[serde(rename = "0")]
+    TakesCreditCards,
+    #[serde(rename = "1")]
+    TakesReservations,
+    #[serde(rename = "2")]
+    OffersDelivery,
+    #[serde(rename = "3")]
+    OffersTakeOut,
+    #[serde(rename = "4")]
+    Wifi,
+    #[serde(rename = "5")]
+    OutdoorSeating,
+    #[serde(rename = "7")]
+    Liked,
+    #[serde(rename = "8")]
+    RecentlyOpened,
+    #[serde(rename = "9")]
+    NotChain,
+    #[serde(rename = "10")]
+    OnlineReservations,
+    #[serde(rename = "13")]
+    DogFriendly,
+    #[serde(rename = "14")]
+    ParkingLot,
+    #[serde(rename = "15")]
+    HappyHour,
+}
+
+impl fmt::Display for Feature {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match *self {
+                Feature::TakesCreditCards => "0",
+                Feature::TakesReservations => "1",
+                Feature::OffersDelivery => "2",
+                Feature::OffersTakeOut => "3",
+                Feature::Wifi => "4",
+                Feature::OutdoorSeating => "5",
+                Feature::Liked => "7",
+                Feature::RecentlyOpened => "8",
+                Feature::NotChain => "9",
+                Feature::OnlineReservations => "10",
+                Feature::DogFriendly => "13",
+                Feature::ParkingLot => "14",
+                Feature::HappyHour => "15",
+            }
+        )
+    }
+}
+
+/// serialize features as a comma-delimited string
+fn serialize_comma_delim<S, D>(
+    x: &Option<Vec<D>>,
+    ser: S,
+) -> ::std::result::Result<S::Ok, S::Error>
+where
+    S: ::serde::Serializer,
+    D: fmt::Display,
+{
+    match *x {
+        Some(ref feats) => {
+            ser.serialize_str(
+                feats
+                    .iter()
+                    .map(|x| format!("{}", x))
+                    .collect::<Vec<_>>()
+                    .join(",")
+                    .as_ref(),
+            )
+        }
+        _ => ser.serialize_none(),
+    }
+}
+
+
+/// Recommedations api options.
+///
+/// Use RecommendationsOptions::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct RecommendationsOptions {
+    /// required unless near is provided. Latitude and longitude of the user’s location.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    ll: String,
+    /// required unless ll is provided. A string naming a place in the world. If the near string is not geocodable, returns a failed_geocode error. Otherwise, searches within the bounds of the geocode and adds a geocode object to the response.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    near: String,
+    /// Accuracy of latitude and longitude, in meters.
+    #[serde(rename = "llAcc")]
+    ll_acc: Option<f64>,
+    /// Altitude of the user’s location, in meters.
+    alt: Option<u32>,
+    /// Accuracy of the user’s altitude, in meters.
+    #[serde(rename = "altAcc")]
+    alt_acc: Option<f64>,
+    /// Radius to search within, in meters. If radius is not specified, a suggested radius will be used based on the density of venues in the area. The maximum supported radius is currently 100,000 meters.
+    radius: Option<u32>,
+    /// One of: food, breakfast, brunch, lunch, coffee, dinner, dessert, drinks, shopping, fun, sights. Specifies the top-level “intent” for a search.
+    intent: Option<String>,
+    /// One of: 1, 2, 3, 4. Only return venues that match the specified price(s), 1 being “$” and 4 being “”. Supports multiple values.
+    #[serde(serialize_with = "serialize_comma_delim")]
+    prices: Option<Vec<u16>>,
+    /// A search term to be applied against venue names.
+    query: Option<String>,
+    /// Return values that match the specified categories, after the `query` parameter is applied.
+    #[serde(serialize_with = "serialize_comma_delim")]
+    categories: Option<Vec<String>>,
+    /// Return values that match the specified categories when there is no `query` parameter provided.
+    #[serde(rename = "categoryId")]
+    category_id: Option<String>,
+    /// Number of results to return, up to 50.
+    limit: Option<u32>,
+    /// Used to page through results, up to 50.
+    offset: Option<u32>,
+    /// Specifies what features (takes credit cards, offers delivery, etc.) that the returned venues should have. The following param values correspond to various features this endpoint supports.
+    /// 0 Takes credit cards.
+    /// 1 Takes reservations.
+    /// 2 Offers delivery.
+    /// 3 Offers take out.
+    /// 4 Has Wi-Fi.
+    /// 5 Has outdoor seating.
+    /// 7 User has liked this venue.
+    /// 8 Recently opened.
+    /// 9 Not part of a chain.
+    /// 10 Takes online reservations.
+    /// 13 Dog-friendly.
+    /// 14 Has parking.
+    /// 15 Has a happy hour.
+    #[serde(serialize_with = "serialize_comma_delim")]
+    features: Option<Vec<Feature>>,
+    /// Boolean flag to only include venues that are open now. This prefers official provider hours but falls back to popular check-in hours.
+    #[serde(rename = "openNow")]
+    open_now: Option<bool>,
+    /// Boolean flag to sort the results by distance instead of relevance.
+    #[serde(rename = "sortByDistance")]
+    sort_by_distance: Option<bool>,
+    /// If you make an authenticated request to this endpoint, you can make results more personal based on the user’s experiences on Swarm and Foursquare (e.g., only return venues that the user has saved to a list or ones that the user has liked before). The following table documents the currently-available personalizations.
+    personalization: Option<String>,
+    /// 1–7 for Monday–Sunday. Only return results that are open on this day.
+    #[serde(rename = "localDay")]
+    local_day: Option<String>,
+    /// Only return results that are open at this time. HH in 24-hr format.
+    #[serde(rename = "localTime")]
+    local_time: Option<String>,
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    locale: Option<String>,
+}
+
+impl RecommendationsOptions {
+    pub fn builder() -> RecommendationsOptionsBuilder {
+        RecommendationsOptionsBuilder::default()
     }
 }
 
@@ -622,6 +796,29 @@ pub struct ExploreResponse {
     /// An array of objects representing groups of recommendations. Each group contains a type such as “recommended” a human-readable (eventually localized) name such as “Recommended Places,” and an array items of recommendation objects, which have an ordered list of objects which contain reasons and venue. The reasons are count and items, where each item has a type such as “social” and a message about why this place may be of interest to the acting user. The venues are compact venues that include stats and hereNow data. We encourage clients to be robust against the introduction or removal of group types by treating the groups as opaque objects to be displayed or by placing unfamiliar groups in a catchall group.
     pub groups: Vec<Group<VenueItem>>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct RecommendationsResponse {
+    #[serde(rename = "normalizedQuery")]
+    pub normalized_query: Option<String>,
+    pub group: RecommendationsGroup,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct RecommendationsGroup {
+    #[serde(rename = "totalResults")]
+    pub total_results: u64,
+    pub results: Vec<Recommendation>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Recommendation {
+    #[serde(rename = "displayType")]
+    pub display_type: String,
+    pub venue: Venue,
+    pub photo: Option<PhotoItem>,
+}
+
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VenueResponse {
