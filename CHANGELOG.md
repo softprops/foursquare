@@ -1,3 +1,7 @@
+# 0.1.12
+
+* deserialize venue canonicalUrl
+
 # 0.1.11
 
 * add venues recommendations interfaces

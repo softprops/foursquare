@@ -755,6 +755,10 @@ pub struct Venue {
     /// Attributes associated with the venue, such as price tier, whether the venue takes reservations, and parking availability.
     /// only present in details requests
     pub attributes: Option<AttributeGroups>,
+    /// The canonical URL for this venue, e.g. https://foursquare.com/v/foursquare-hq/4ab7e57cf964a5205f7b20e3
+    /// only present in details requests
+    #[serde(rename = "canonicalUrl")]
+    pub canonical_url: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
