@@ -846,7 +846,6 @@ pub struct Recommendation {
     pub photo: Option<PhotoItem>,
 }
 
-
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VenueResponse {
     pub venue: Venue,
