@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ExploreOptionsBuilder` struct in crate `foursquare`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ExploreOptionsBuilder">
+
+    <title>foursquare::venue::ExploreOptionsBuilder - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'>Struct ExploreOptionsBuilder</p><div class="block items"><ul><li><a href="#methods">Methods</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../index.html'>foursquare</a>::<wbr><a href='index.html'>venue</a></p><script>window.sidebarCurrent = {name: 'ExploreOptionsBuilder', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>foursquare</a>::<wbr><a href='index.html'>venue</a>::<wbr><a class="struct" href=''>ExploreOptionsBuilder</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ExploreOptionsBuilder { /* fields omitted */ }</pre><div class='docblock'><p>Builder for <a href="struct.ExploreOptions.html"><code>ExploreOptions</code></a>.</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl <a class="struct" href="../../foursquare/venue/struct.ExploreOptionsBuilder.html" title="struct foursquare::venue::ExploreOptionsBuilder">ExploreOptionsBuilder</a></code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.ll' class="method"><span id='ll.v' class='invisible'><code>pub fn <a href='#method.ll' class='fnname'>ll</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>required unless near is provided. Latitude and longitude of the user’s location.</p>
+</div><h4 id='method.near' class="method"><span id='near.v' class='invisible'><code>pub fn <a href='#method.near' class='fnname'>near</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>required unless ll is provided. A string naming a place in the world. If the near string is not geocodable, returns a failed_geocode error. Otherwise, searches within the bounds of the geocode and adds a geocode object to the response.</p>
+</div><h4 id='method.ll_acc' class="method"><span id='ll_acc.v' class='invisible'><code>pub fn <a href='#method.ll_acc' class='fnname'>ll_acc</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Accuracy of latitude and longitude, in meters.</p>
+</div><h4 id='method.alt' class="method"><span id='alt.v' class='invisible'><code>pub fn <a href='#method.alt' class='fnname'>alt</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Altitude of the user’s location, in meters.</p>
+</div><h4 id='method.alt_acc' class="method"><span id='alt_acc.v' class='invisible'><code>pub fn <a href='#method.alt_acc' class='fnname'>alt_acc</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Accuracy of the user’s altitude, in meters.</p>
+</div><h4 id='method.radius' class="method"><span id='radius.v' class='invisible'><code>pub fn <a href='#method.radius' class='fnname'>radius</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Radius to search within, in meters. If radius is not specified, a suggested radius will be used based on the density of venues in the area. The maximum supported radius is currently 100,000 meters.</p>
+</div><h4 id='method.section' class="method"><span id='section.v' class='invisible'><code>pub fn <a href='#method.section' class='fnname'>section</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>One of food, drinks, coffee, shops, arts, outdoors, sights, trending, nextVenues (venues frequently visited after a given venue), or topPicks (a mix of recommendations generated without a query from the user). Choosing one of these limits results to venues with the specified category or property.</p>
+</div><h4 id='method.query' class="method"><span id='query.v' class='invisible'><code>pub fn <a href='#method.query' class='fnname'>query</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>A term to be searched against a venue’s tips, category, etc. The query parameter has no effect when a section is specified.</p>
+</div><h4 id='method.limit' class="method"><span id='limit.v' class='invisible'><code>pub fn <a href='#method.limit' class='fnname'>limit</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Number of results to return, up to 50.</p>
+</div><h4 id='method.offset' class="method"><span id='offset.v' class='invisible'><code>pub fn <a href='#method.offset' class='fnname'>offset</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Used to page through results, up to 50.</p>
+</div><h4 id='method.novelty' class="method"><span id='novelty.v' class='invisible'><code>pub fn <a href='#method.novelty' class='fnname'>novelty</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Pass new or old to limit results to places the acting user hasn’t been or has been, respectively. Omitting this parameter returns a mixture of old and new venues.</p>
+</div><h4 id='method.friend_visits' class="method"><span id='friend_visits.v' class='invisible'><code>pub fn <a href='#method.friend_visits' class='fnname'>friend_visits</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Pass visited or notvisited to limit results to places the acting user’s friends have or haven’t been, respectively. Omitting this parameter returns a mixture of venues to which the user’s friends have or haven’t been.</p>
+</div><h4 id='method.time' class="method"><span id='time.v' class='invisible'><code>pub fn <a href='#method.time' class='fnname'>time</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Pass any to retrieve results for any time of day. Omitting this parameter returns results targeted to the current time of day.</p>
+</div><h4 id='method.day' class="method"><span id='day.v' class='invisible'><code>pub fn <a href='#method.day' class='fnname'>day</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Pass any to retrieve results for any day of the week. Omitting this parameter returns results targeted to the current day of the week.</p>
+</div><h4 id='method.venue_photos' class="method"><span id='venue_photos.v' class='invisible'><code>pub fn <a href='#method.venue_photos' class='fnname'>venue_photos</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Boolean flag to include a photo in the response for each venue, if one is available. Default is 0 (no photos). Photos are returned as part of the venue JSON object.</p>
+</div><h4 id='method.last_venue' class="method"><span id='last_venue.v' class='invisible'><code>pub fn <a href='#method.last_venue' class='fnname'>last_venue</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>A venue ID to use in combination with the intent=nextVenues parameter, which returns venues users often visit after a given venue. If intent=nextVenues is specified but lastVenue is not, the user’s last check-in will be used if it is within 2 hours. If the user has not checked in within the last 2 hours, no results will be returned.</p>
+</div><h4 id='method.open_now' class="method"><span id='open_now.v' class='invisible'><code>pub fn <a href='#method.open_now' class='fnname'>open_now</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Boolean flag to only include venues that are open now. This prefers official provider hours but falls back to popular check-in hours.</p>
+</div><h4 id='method.sort_by_distance' class="method"><span id='sort_by_distance.v' class='invisible'><code>pub fn <a href='#method.sort_by_distance' class='fnname'>sort_by_distance</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;value: VALUE<br>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Boolean flag to sort the results by distance instead of relevance.</p>
+</div><h4 id='method.price' class="method"><span id='price.v' class='invisible'><code>pub fn <a href='#method.price' class='fnname'>price</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Comma separated list of price points. Currently the valid range of price points are [1,2,3,4], 1 being the least expensive, 4 being the most expensive. For food venues, in the United States, 1 is &lt; $10 an entree, 2 is $10-$20 an entree, 3 is $20-$30 an entree, 4 is &gt; $30 an entree.</p>
+</div><h4 id='method.saved' class="method"><span id='saved.v' class='invisible'><code>pub fn <a href='#method.saved' class='fnname'>saved</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Boolean flag to only include venues that the user has saved on their To-Do list or to another list.</p>
+</div><h4 id='method.locale' class="method"><span id='locale.v' class='invisible'><code>pub fn <a href='#method.locale' class='fnname'>locale</a>&lt;VALUE:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;&gt;&gt;(&amp;mut self, value: VALUE) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p><a href="https://developer.foursquare.com/docs/api/configuration/internationalization">Internationalization</a></p>
+</div><h4 id='method.build' class="method"><span id='build.v' class='invisible'><code>pub fn <a href='#method.build' class='fnname'>build</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../foursquare/venue/struct.ExploreOptions.html" title="struct foursquare::venue::ExploreOptions">ExploreOptions</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Builds a new <code>ExploreOptions</code>.</p>
+
+<h1 id='errors' class='section-header'><a href='#errors'>Errors</a></h1>
+<p>If a required field has not been initialized.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+        <h3 id='impl-Default' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../../foursquare/venue/struct.ExploreOptionsBuilder.html" title="struct foursquare::venue::ExploreOptionsBuilder">ExploreOptionsBuilder</a></code><a href='#impl-Default' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class="struct" href="../../foursquare/venue/struct.ExploreOptionsBuilder.html" title="struct foursquare::venue::ExploreOptionsBuilder">ExploreOptionsBuilder</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
+</div></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../foursquare/venue/struct.ExploreOptionsBuilder.html" title="struct foursquare::venue::ExploreOptionsBuilder">ExploreOptionsBuilder</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../foursquare/venue/struct.ExploreOptionsBuilder.html" title="struct foursquare::venue::ExploreOptionsBuilder">ExploreOptionsBuilder</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/foursquare/venue/mod.rs.html#508' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#112-114' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "foursquare";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

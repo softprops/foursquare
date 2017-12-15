@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Credentials","types of credentials used to authenticate requests"]],"mod":[["error","Client errors"],["venue","Venue interfaces"]],"struct":[["Client","Entry point interface for interacting with Foursquare API"],["Meta",""],["Response",""]],"type":[["Future","A type alias for `Futures` that may return `foursquare::Errors`"]]});
