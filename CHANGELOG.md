@@ -1,3 +1,7 @@
+# 0.1.13
+
+* add categories api interface
+
 # 0.1.12
 
 * deserialize venue canonicalUrl

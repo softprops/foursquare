@@ -22,6 +22,23 @@ impl<C: Connect + Clone> Venues<C> {
         Self { client }
     }
 
+    /// Get all venue categories
+    ///
+    /// See the official
+    /// [api docs](https://developer.foursquare.com/docs/api/venues/categories)
+    /// for more information
+    pub fn categories(
+        &self,
+        options: &CategoriesOptions,
+    ) -> Future<Response<CategoriesResponse>> {
+        self.client.get(format!(
+            "{host}/v2/venues/categories?={query}",
+            host = self.client.host,
+            query = serde_urlencoded::to_string(options).unwrap()
+        ))
+    }
+
+
     /// Get the tips for a single venue
     ///
     /// See the official
@@ -164,6 +181,22 @@ pub enum Intent {
 impl Default for Intent {
     fn default() -> Self {
         Intent::Checkin
+    }
+}
+
+/// Categories api options.
+///
+/// Use Categories::builder() interface to construct these
+#[derive(Default, Debug, Deserialize, Serialize, Builder)]
+#[builder(setter(into), default)]
+pub struct CategoriesOptions {
+    /// [Internationalization](https://developer.foursquare.com/docs/api/configuration/internationalization)
+    pub locale: Option<String>,
+}
+
+impl CategoriesOptions {
+    pub fn builder() -> CategoriesOptionsBuilder {
+        CategoriesOptionsBuilder::default()
     }
 }
 
@@ -599,6 +632,7 @@ pub struct Category {
     pub short_name: String,
     pub icon: Icon,
     pub primary: Option<bool>,
+    pub categories: Option<Vec<Category>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -673,6 +707,11 @@ pub struct VenueHoursResponse {
     pub hours: VenueHours,
     /// An array of timeframes of popular hours.
     pub popular: VenueHours,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CategoriesResponse {
+    pub categories: Vec<Category>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
