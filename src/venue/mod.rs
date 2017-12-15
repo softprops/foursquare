@@ -1,5 +1,7 @@
 //! Venue interfaces
 
+// https://github.com/colin-kiegel/rust-derive-builder/issues/104
+#![allow(unused_mut)]
 use std::fmt;
 
 use hyper::client::Connect;
