@@ -876,6 +876,7 @@ pub struct RecommendationsResponse {
 pub struct RecommendationsGroup {
     #[serde(rename = "totalResults")]
     pub total_results: u64,
+    #[serde(default)]
     pub results: Vec<Recommendation>,
 }
 

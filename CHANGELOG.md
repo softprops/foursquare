@@ -1,3 +1,7 @@
+# 0.1.14
+
+* handle case of missing recommendations field `results`
+
 # 0.1.13
 
 * add categories api interface
